@@ -1,2 +1,5 @@
 *.o
 *.swp
+*.d
+depend/*
+binary/*

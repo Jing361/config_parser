@@ -17,8 +17,8 @@ public:
     mElements[arg][eleName] = string();
   }
 
-  fstream&& parse_config( fstraem&& file ){
-    return file;
+  template<typename stream>
+  void parse_config( stream&& file ){
   }
 };
 
