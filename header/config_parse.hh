@@ -3,6 +3,18 @@
 
 #include<string>
 #include<map>
+#include<exception>
+
+class element_not_found : public std::exception{
+private:
+  std::string mMsg;
+
+public:
+  element_not_found( const std::string& name, const std::string& value );
+
+  const char* what() const noexcept override;
+};
+
 class config_parse{
 private:
   typedef std::map<std::string, std::string> element;
