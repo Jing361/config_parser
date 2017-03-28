@@ -5,7 +5,7 @@
 
 using namespace std;
 
-element_not_found::element_not_found( const std::string& name, const std::string& value ):
+element_not_found::element_not_found( const string& name, const string& value ):
   mMsg( string( "Element " ) + name + " not found.  Expected assignment: " + value ){
 }
 
