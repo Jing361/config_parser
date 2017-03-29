@@ -4,6 +4,7 @@
 #include<string>
 #include<map>
 #include<exception>
+#include<sstream>
 
 class element_not_found : public std::exception{
 private:
@@ -26,7 +27,18 @@ public:
 
   template<typename T>
   T get_element( const std::string& tag, const std::string& name ){
-    return T( mElements[tag][name] );
+    try{
+      mElements.at( tag ).at( name );
+    } catch( std::out_of_range){
+      throw element_not_found( tag, name );
+    }
+
+    std::stringstream ss( mElements[tag][name] );
+    T t;
+
+    ss >> t;
+
+    return t;
   }
 
   void parse_config( const std::string& fileName );

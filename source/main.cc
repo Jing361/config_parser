@@ -18,6 +18,7 @@ int main(){
   cp.parse_config( "data/config.ini" );
 
   cout << cp.get_element<string>( "CPU", "ports" ) << endl;
+  cout << cp.get_element<int>( "CPU", "ports" ) << endl;
 
   return 0;
 }
