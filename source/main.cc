@@ -22,5 +22,29 @@ TEST_CASE( "basics", "start" ){
 
   REQUIRE( cp.get_element<string>( "CPU", "ports" ) == string( "1" ) );
   REQUIRE( cp.get_element<int>( "CPU", "ports" ) == 1 );
+  REQUIRE( cp.get_element<bool>( "CPU", "ports" ) );
+
+  REQUIRE( cp.get_element<string>( "CPU", "timers" ) == string( "1" ) );
+  REQUIRE( cp.get_element<int>( "CPU", "timers" ) == 1 );
+  REQUIRE( cp.get_element<bool>( "CPU", "timers" ) );
+
+  REQUIRE( cp.get_element<string>( "CPU", "adcs" ) == string( "1" ) );
+  REQUIRE( cp.get_element<int>( "CPU", "adcs" ) == 1 );
+  REQUIRE( cp.get_element<bool>( "CPU", "adcs" ) );
+
+
+  REQUIRE( cp.get_element<string>( "aoeu", "a" ) == string( "1" ) );
+  REQUIRE( cp.get_element<int>( "aoeu", "a" ) == 1 );
+  REQUIRE( cp.get_element<bool>( "aoeu", "a" ) );
+
+  REQUIRE( cp.get_element<string>( "aoeu", "b" ) == string( "2" ) );
+  REQUIRE( cp.get_element<int>( "aoeu", "b" ) == 2 );
+  REQUIRE( cp.get_element<bool>( "aoeu", "b" ) );
+
+  REQUIRE( cp.get_element<string>( "aoeu", "stuff" ) == string( "things" ) );
+  REQUIRE( cp.get_element<bool>( "aoeu", "b" ) );
+
+  REQUIRE( cp.get_element<string>( "htns", "value" ) == string( "text" ) );
+  REQUIRE( cp.get_element<bool>( "aoeu", "b" ) );
 }
 
