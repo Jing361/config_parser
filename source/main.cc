@@ -17,6 +17,7 @@ TEST_CASE( "basics", "start" ){
   cp.add_element( "aoeu", "b" );
   cp.add_element( "aoeu", "stuff" );
   cp.add_element( "htns", "value" );
+  cp.add_element( "htns", "empty" );
 
   cp.parse_config( "data/config.ini" );
 
@@ -46,5 +47,24 @@ TEST_CASE( "basics", "start" ){
 
   REQUIRE( cp.get_element<string>( "htns", "value" ) == string( "text" ) );
   REQUIRE( cp.get_element<bool>( "aoeu", "b" ) );
+
+  REQUIRE( cp.get_element<string>( "htns", "empty" ) == string() );
+  REQUIRE( !cp.get_element<bool>( "htns", "empty" ) );
+
+  bool test = false;
+  try{
+    cp.get_element<bool>( "nope", "don't_care" );
+  } catch( element_not_found ){
+    test = true;
+  }
+  REQUIRE( test );
+
+  test = false;
+  try{
+    !cp.get_element<bool>( "htns", "nope" );
+  } catch( element_not_found ){
+    test = true;
+  }
+  REQUIRE( test );
 }
 
