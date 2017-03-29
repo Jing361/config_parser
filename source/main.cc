@@ -1,11 +1,14 @@
 #include<string>
 #include<iostream>
 
+#define CATCH_CONFIG_MAIN
+#include<catch.hpp>
+
 #include"config_parse.hh"
 
 using namespace std;
 
-int main(){
+TEST_CASE( "basics", "start" ){
   config_parse cp;
   cp.add_element( "CPU", "ports" );
   cp.add_element( "CPU", "timers" );
@@ -17,9 +20,7 @@ int main(){
 
   cp.parse_config( "data/config.ini" );
 
-  cout << cp.get_element<string>( "CPU", "ports" ) << endl;
-  cout << cp.get_element<int>( "CPU", "ports" ) << endl;
-
-  return 0;
+  REQUIRE( cp.get_element<string>( "CPU", "ports" ) == string( "1" ) );
+  REQUIRE( cp.get_element<int>( "CPU", "ports" ) == 1 );
 }
 
