@@ -1,10 +1,12 @@
 #include<string>
 #include<iostream>
+#include<vector>
 
 #define CATCH_CONFIG_MAIN
 #include<catch.hpp>
 
 #include"config_parse.hh"
+#include"xml_parse.hh"
 
 using namespace std;
 
@@ -66,5 +68,33 @@ TEST_CASE( "basics", "start" ){
     test = true;
   }
   REQUIRE( test );
+}
+
+TEST_CASE( "XML", "xml" ){
+  xml_parse xp;
+  string cpuname( "CPU" );
+  vector<string> cpuitems;
+  vector<string> cpuprops;
+  cpuitems.push_back( "RES" );
+  cpuprops.push_back( "port" );
+  cpuprops.push_back( "timer" );
+  cpuprops.push_back( "adc" );
+
+  string rname( "RES" );
+  vector<string> ritems;
+  vector<string> rprops;
+  rprops.push_back( "value" );
+
+  xp.add_structure( cpuname, cpuitems.begin(), cpuitems.end(),
+                             cpuprops.begin(), cpuprops.end() );
+  xp.add_structure( rname, ritems.begin(), ritems.end(),
+                           rprops.begin(), rprops.end() );
+
+  for( auto it : xp.get_structure().mItems ){
+    cout << it.first << '\t';
+    for( auto jt : it.second.mProps ){
+      cout << jt.first << '\t' << jt.second << endl;
+    }
+  }
 }
 
