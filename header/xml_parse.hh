@@ -38,17 +38,8 @@ private:
   void findObjs( std::string& text, item& it );
 
 public:
-  template<typename iterItem, typename iterProp>
-  void add_structure( const std::string& name, iterItem firstItem = iterItem(),
-                                               iterItem lastItem  = iterItem(),
-                                               iterProp firstProp = iterProp(),
-                                               iterProp lastProp  = iterProp() ){
-    type t;
-    t.mItems.insert( firstItem, lastItem );
-    t.mProps.insert( firstProp, lastProp );
-
-    mTypes[name] = t;
-  }
+  void add_structure( const std::string& name, const std::string& itm,
+                                               const std::string& prp );
 
   item get_structure(){
     return mItem;

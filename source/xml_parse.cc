@@ -5,13 +5,32 @@
 
 using namespace std;
 
+void xml_parse::add_structure( const std::string& name, const std::string& itm, const std::string& prp ){
+  type& t = mTypes[name];
+
+  if( itm != "" ){
+    t.mItems.insert( itm );
+  }
+  if( prp != "" ){
+    t.mProps.insert( prp );
+  }
+}
+
 void xml_parse::findObjs( string& text, item& it ){
   regex rexp( "<\\s*(\\w+)(\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*)+>((?:\\s*([^\\\\\\1]*)\\s*)+)<\\s*\\\\\\1\\s*>|<\\/(\\w+)\\s+(\\w+)\\s*=\\s*(\\w+)\\s*>" );
   smatch matches;
 
+cout << "test" << endl;
   while( regex_search( text, matches, rexp ) ){
+cout << "woo!" << endl;
     if( string( matches[0] )[1] == '/' ){
+cout << "la-dee-da" << endl;
       bool found = false;
+
+      cout << matches.size() << endl;
+      for( auto it : matches ){
+        cout << it << endl;
+      }
 
       try{
         found = mTypes.at( matches[8] ).mProps.count( matches[9] ) == 1;
@@ -23,6 +42,7 @@ void xml_parse::findObjs( string& text, item& it ){
         it.mProps[matches[8]] = matches[10];
       }
     } else {
+cout << "uh-oh?" << endl;
       string data( matches[6] );
       findObjs( data, it.mItems[matches[5]] );
     }
