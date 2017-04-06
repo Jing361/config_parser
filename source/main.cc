@@ -8,6 +8,8 @@
 #include"config_parse.hh"
 #include"xml_parse.hh"
 
+#include<regex>
+
 using namespace std;
 
 TEST_CASE( "basics", "start" ){
@@ -80,13 +82,28 @@ TEST_CASE( "XML", "xml" ){
   xp.add_structure( cpuname, "", "adc" );
   xp.add_structure( rname, "", "value" );
 
-  xp.parse_xml( "data/config.xml" );
+  //xp.parse_xml( "data/config.xml" );
 
   for( auto it : xp.get_structure().mItems ){
     cout << it.first << '\t';
     for( auto jt : it.second.mProps ){
       cout << jt.first << '\t' << jt.second << endl;
     }
+  }
+}
+
+TEST_CASE( "TEMP", "testing" ){
+  string text( "<AAA> CCC <\\AAA> </BBB>" );
+  regex rexp( "<(\\w+)>\\s*(\\w+)\\s*<\\\\\\1>|</(\\w+)>" );
+  smatch matches;
+
+  cout << matches.size() << endl;
+  while( regex_search( text, matches, rexp ) ){
+    for( auto it : matches ){
+      cout << it << endl;
+    }
+
+    text = matches.suffix().str();
   }
 }
 
