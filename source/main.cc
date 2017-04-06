@@ -78,7 +78,7 @@ TEST_CASE( "XML", "xml" ){
   xp.add_structure( cpuname, rname, "port" );
   xp.add_structure( cpuname, "", "timer" );
   xp.add_structure( cpuname, "", "adc" );
-  xp.add_structure( rname, "value" );
+  xp.add_structure( rname, "", "value" );
 
   xp.parse_xml( "data/config.xml" );
 
