@@ -73,22 +73,14 @@ TEST_CASE( "basics", "start" ){
 TEST_CASE( "XML", "xml" ){
   xml_parse xp;
   string cpuname( "CPU" );
-  vector<string> cpuitems;
-  vector<string> cpuprops;
-  cpuitems.push_back( "RES" );
-  cpuprops.push_back( "port" );
-  cpuprops.push_back( "timer" );
-  cpuprops.push_back( "adc" );
-
   string rname( "RES" );
-  vector<string> ritems;
-  vector<string> rprops;
-  rprops.push_back( "value" );
 
-  xp.add_structure( cpuname, cpuitems.begin(), cpuitems.end(),
-                             cpuprops.begin(), cpuprops.end() );
-  xp.add_structure( rname, ritems.begin(), ritems.end(),
-                           rprops.begin(), rprops.end() );
+  xp.add_structure( cpuname, rname, "port" );
+  xp.add_structure( cpuname, "", "timer" );
+  xp.add_structure( cpuname, "", "adc" );
+  xp.add_structure( rname, "value" );
+
+  xp.parse_xml( "data/config.xml" );
 
   for( auto it : xp.get_structure().mItems ){
     cout << it.first << '\t';
