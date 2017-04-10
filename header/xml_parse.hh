@@ -35,7 +35,7 @@ private:
   item mItem;
   std::map<std::string, type> mTypes;
 
-  void findObjs( std::string& text, item& it );
+  void findObjs( const std::string& text, item& it, const std::string& typeName = "" );
 
 public:
   void add_structure( const std::string& name, const std::string& itm,

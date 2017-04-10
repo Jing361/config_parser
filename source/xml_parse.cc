@@ -5,7 +5,18 @@
 
 using namespace std;
 
-void xml_parse::add_structure( const std::string& name, const std::string& itm, const std::string& prp ){
+typedef enum{
+  TOTAL_RESULT_IDX,
+  PROP_TAG_IDX,
+  TYPE_IDX,
+  TRAIT_IDX,
+  QUOTE_IDX,
+  TRAIT_VALUE_IDX,
+  IGNORE_IDX,
+  CONTENT_IDX,
+} DATA_INDEX;
+
+void xml_parse::add_structure( const string& name, const string& itm, const string& prp ){
   type& t = mTypes[name];
 
   if( itm != "" ){
@@ -16,33 +27,42 @@ void xml_parse::add_structure( const std::string& name, const std::string& itm, 
   }
 }
 
-void xml_parse::findObjs( string& text, item& it ){
-  regex rexp( "<\\s*(\\w+)(\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*)+>((?:\\s*([^\\\\\\1]*)\\s*)+)<\\s*\\\\\\1\\s*>|<\\/(\\w+)\\s+(\\w+)\\s*=\\s*(\\w+)\\s*>" );
+void xml_parse::findObjs( const string& inputText, item& it, const string& typeName ){
+  regex rexp( "<(/?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(?:\\s*([\\s\\w<>=\\\\/]+)\\s*<\\\\\\2>)?" );
   smatch matches;
+  string text = inputText;
 
   while( regex_search( text, matches, rexp ) ){
-    if( string( matches[0] )[1] == '/' ){
-      bool found = false;
+    if( string( matches[PROP_TAG_IDX] ) == string( "/" ) && string( matches[CONTENT_IDX] ) == "" ){
+      bool validType = false;
 
-      try{
-        found = mTypes.at( matches[8] ).mProps.count( matches[9] ) == 1;
-      } catch( out_of_range& ) {
-        throw undefined_type( matches[8] );
+      if( typeName == "" ){
+        validType = true;
+      } else {
+        string name( matches[TYPE_IDX] );
+
+        try{
+          validType = ( mTypes.at( typeName ).mProps.count( name ) == 1 );
+        } catch( out_of_range ) {
+          throw undefined_type( name );
+        }
       }
 
-      if( found ){
-        it.mProps[matches[8]] = matches[10];
+      if( validType ){
+        it.mProps[matches[TYPE_IDX]] = matches[TRAIT_VALUE_IDX];
       }
+    } else if( string( matches[PROP_TAG_IDX] ) != string( "/" ) && string( matches[6] ) != "" ){
+      findObjs( matches[CONTENT_IDX], it.mItems[matches[TRAIT_VALUE_IDX]], matches[TYPE_IDX] );
     } else {
-      string data( matches[6] );
-      findObjs( data, it.mItems[matches[5]] );
+      //TODO throw syntax error
+      throw undefined_type( "syntax error!" );
     }
 
     text = matches.suffix().str();
   }
 }
 
-void xml_parse::parse_xml( const std::string& fileName ){
+void xml_parse::parse_xml( const string& fileName ){
   fstream file( fileName );
   string text;
 
