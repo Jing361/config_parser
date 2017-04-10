@@ -93,8 +93,8 @@ TEST_CASE( "XML", "xml" ){
 }
 
 TEST_CASE( "TEMP", "testing" ){
-  string text( "<AAA> CCC <\\AAA> </BBB>" );
-  regex rexp( "<(\\w+)>\\s*(\\w+)\\s*<\\\\\\1>|</(\\w+)>" );
+  string text( "<AAA name=charles> CCC <\\AAA> </BBB>" );
+  regex rexp( "<\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\3\\s*>\\s*(\\w+)\\s*<\\\\\\1>|</(\\w+)>" );
   smatch matches;
 
   cout << matches.size() << endl;
