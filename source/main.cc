@@ -94,7 +94,7 @@ TEST_CASE( "XML", "xml" ){
 
 TEST_CASE( "TEMP", "testing" ){
   string text( "<AAA name=charles>\n\t</CCC thing=stuff>\n\t<\\AAA>\n</BBB text=letters>" );
-  regex rexp( "<\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\3\\s*>\\s*([\\s\\w<>=\\\\/]+)\\s*<\\\\\\1>|</\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\8\\s*>" );
+  regex rexp( "<(/?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(\\s*([\\s\\w<>=\\\\/]+)\\s*<\\\\\\2>)?" );
   smatch matches;
 
   while( regex_search( text, matches, rexp ) ){
