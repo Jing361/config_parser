@@ -3,6 +3,8 @@
 
 #include"xml_parse.hh"
 
+#include<iostream>
+
 using namespace std;
 
 typedef enum{
@@ -12,7 +14,6 @@ typedef enum{
   TRAIT_IDX,
   QUOTE_IDX,
   TRAIT_VALUE_IDX,
-  IGNORE_IDX,
   CONTENT_IDX,
 } DATA_INDEX;
 
@@ -28,12 +29,17 @@ void xml_parse::add_structure( const string& name, const string& itm, const stri
 }
 
 void xml_parse::findObjs( const string& inputText, item& it, const string& typeName ){
-  regex rexp( "<(/?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(?:\\s*([\\s\\w<>=\\\\/]+)\\s*<\\\\\\2>)?" );
+  regex rexp( "<(/?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(?:\\s*([\\s\\w<>=\\\\/\"]+)\\s*<\\\\\\2>)?" );
   smatch matches;
   string text = inputText;
 
   while( regex_search( text, matches, rexp ) ){
+int i = 0;
+for( auto it : matches ){
+  cout << i++ << '\t' << it << endl;
+}
     if( string( matches[PROP_TAG_IDX] ) == string( "/" ) && string( matches[CONTENT_IDX] ) == "" ){
+cout << "prop" << endl;
       bool validType = false;
 
       if( typeName == "" ){
@@ -51,10 +57,17 @@ void xml_parse::findObjs( const string& inputText, item& it, const string& typeN
       if( validType ){
         it.mProps[matches[TYPE_IDX]] = matches[TRAIT_VALUE_IDX];
       }
-    } else if( string( matches[PROP_TAG_IDX] ) != string( "/" ) && string( matches[6] ) != "" ){
+    } else if( string( matches[PROP_TAG_IDX] ) == string( "" ) && string( matches[CONTENT_IDX] ) != "" ){
+cout << "obj" << endl;
       findObjs( matches[CONTENT_IDX], it.mItems[matches[TRAIT_VALUE_IDX]], matches[TYPE_IDX] );
     } else {
       //TODO throw syntax error
+cout << "property tag\t";
+cout << string( matches[PROP_TAG_IDX] ) << endl;
+cout << "content tag\t";
+cout << string( matches[CONTENT_IDX] ) << endl;
+cout << "source text\t";
+cout << text << endl;
       throw undefined_type( "syntax error!" );
     }
 

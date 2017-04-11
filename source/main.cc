@@ -93,10 +93,12 @@ TEST_CASE( "XML", "xml" ){
 }
 
 TEST_CASE( "TEMP", "testing" ){
-/*  string text( "<AAA name=charles>\n\t</CCC thing=stuff>\n\t<\\AAA>\n</BBB text=letters>" );
-  regex rexp( "<(/?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(\\s*([\\s\\w<>=\\\\/]+)\\s*<\\\\\\2>)?" );
+  string text( "<AAA name=charles>\n\t<EEE name = \"sam\">\n\t\t<\\CCC thing=stuff>\n\t</EEE>\n\t<\\DDD stuff = \"things\">\n</AAA>\n<\\BBB text=letters>\n\n<CPU name = \"CPU1\">\n\t<RES name = \"R1\">\n\t\t<\\value val = 1>\n\t</RES>\n\t<\\port name = \"A\">\n\t<\\adc name = \"1\">\n\t<\\timer name = \"1\">\n</CPU>\n\n<CPU name=\"CPU2\">\n\t<\\port name = \"C\">\n</CPU>" );
+
+  regex rexp( "<(\\?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(?:\\s*([\\s\\w<>=\\\\/\"^\\2]+)\\s*</\\2>)?" );
   smatch matches;
 
+cout << "main" << endl;
   while( regex_search( text, matches, rexp ) ){
 int i = 0;
     for( auto it : matches ){
@@ -106,5 +108,5 @@ cout << i++ << '\t';
 
     text = matches.suffix().str();
   }
-*/}
+}
 
