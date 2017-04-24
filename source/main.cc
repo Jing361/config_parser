@@ -8,7 +8,8 @@
 #include"config_parse.hh"
 #include"xml_parse.hh"
 
-#include<regex>
+#include<array>
+#include<algorithm>
 
 using namespace std;
 
@@ -82,7 +83,7 @@ TEST_CASE( "XML", "xml" ){
   xp.add_structure( cpuname, "", "adc" );
   xp.add_structure( rname, "", "value" );
 
-  xp.parse_xml( "data/config.xml" );
+  //xp.parse_xml( "data/config.xml" );
 
   for( auto it : xp.get_structure().mItems ){
     cout << it.first << '\t';
@@ -92,21 +93,52 @@ TEST_CASE( "XML", "xml" ){
   }
 }
 
+typedef enum{
+  TAG_TOKEN,
+  OPEN_BRACKET_TOKEN,
+  CLOSED_BRACKET_TOKEN,
+  SINGLE_LINE_TOKEN,
+  QUOTE_TOKEN,
+  EQUALS_TOKEN,
+  STRING_TOKEN,
+  END_TAG_OPEN_TOKEN,
+  MAX_TOKEN,
+} TOKEN_t;
+
 TEST_CASE( "TEMP", "testing" ){
-  string text( "<AAA name=charles>\n\t<EEE name = \"sam\">\n\t\t<\\CCC thing=stuff>\n\t</EEE>\n\t<\\DDD stuff = \"things\">\n</AAA>\n<\\BBB text=letters>\n\n<CPU name = \"CPU1\">\n\t<RES name = \"R1\">\n\t\t<\\value val = 1>\n\t</RES>\n\t<\\port name = \"A\">\n\t<\\adc name = \"1\">\n\t<\\timer name = \"1\">\n</CPU>\n\n<CPU name=\"CPU2\">\n\t<\\port name = \"C\">\n</CPU>" );
+  vector<pair<TOKEN_t, string> > tokens;
+  array<string, 6> validTokens{ "<", ">", "</", "<\\", "=", "\"" };
+  string text( "<AAA name = charles>\n\t<\\BBB things = stuff>\n\t<\\CCC stuff=\"things\">\n</AAA>\n\n<\\DDD text= letters>\n\n<CPU name = \"CPU1\">\n\t<RES name=\"R1\">\n\t\t<\\value val = 1K>\n\t</RES>\n\t<\\port name = \"A\">\n\t<\\timer name =1>\n\t<\\adc name=1>\n</CPU>\n\n<CPU name=\"CPU2\">\n\t<\\port name = \"C\">\n</CPU>\n\n" );
 
-  regex rexp( "<(\\?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(?:\\s*([\\s\\w<>=\\\\/\"^\\2]+)\\s*</\\2>)?" );
-  smatch matches;
+  auto textIter = text.begin();
+  while( textIter != text.end() ){
+    TOKEN_t token;
+    string data;
 
-cout << "main" << endl;
-  while( regex_search( text, matches, rexp ) ){
-int i = 0;
-    for( auto it : matches ){
-cout << i++ << '\t';
-      cout << it << endl;
+    if( *textIter == '<' ){
+      data += *textIter;
+      if( *( textIter + 1 ) == '/' ){
+        token = END_TAG_OPEN_TOKEN;
+        data += *textIter;
+      } else if( *( textIter + 1 ) == '\\' ){
+        token = SINGLE_LINE_TOKEN;
+        data += *textIter;
+      } else {
+        token = OPEN_BRACKET_TOKEN;
+      }
+    } else if( *textIter == '>' ){
+      token = CLOSED_BRACKET_TOKEN;
+    } else if( *textIter == '=' ){
+      token = EQUALS_TOKEN;
+    } else if( *textIter == '\"' ){
+      token = QUOTE_TOKEN;
+    } else if( isalpha( *textIter ) ){
+      
     }
 
-    text = matches.suffix().str();
+    tokens.emplace_back( token, string( textIter, textIter + 1 ) );
+
+    ++textIter;
   }
 }
 

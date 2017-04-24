@@ -78,13 +78,7 @@ $(DIRS):
 #   sed:    strip leading spaces
 #   sed:    add trailing colons
 $(objdir)/%.o:|$(DIRS)
-	$(CC) -c $(sourcedir)/$*$(sourceextension) $(FLAGS) -o $@
-	$(CC) -MM $(FLAGS) $(sourcedir)/$*$(sourceextension) > $(depdir)/$*.d
-	@mv -f $(depdir)/$*.d $(depdir)/$*.d.tmp
-	@sed -e 's|.*:|$(objdir)/$*.o:|' < $(depdir)/$*.d.tmp > $(depdir)/$*.d
-	@sed -e 's/.*://' -e 's/\\$$//' < $(depdir)/$*.d.tmp | fmt -1 | \
-	  sed -e 's/^ *//' -e 's/$$/:/' >> $(depdir)/$*.d
-	@$(RM) -f $(depdir)/$*.d.tmp
+	$(CC) -c -MMD -MP -MF $(depdir)/$*.d $(sourcedir)/$*$(sourceextension) $(FLAGS) -o $@
 
 endif
 

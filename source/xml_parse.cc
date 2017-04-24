@@ -3,8 +3,6 @@
 
 #include"xml_parse.hh"
 
-#include<iostream>
-
 using namespace std;
 
 typedef enum{
@@ -34,12 +32,7 @@ void xml_parse::findObjs( const string& inputText, item& it, const string& typeN
   string text = inputText;
 
   while( regex_search( text, matches, rexp ) ){
-int i = 0;
-for( auto it : matches ){
-  cout << i++ << '\t' << it << endl;
-}
     if( string( matches[PROP_TAG_IDX] ) == string( "/" ) && string( matches[CONTENT_IDX] ) == "" ){
-cout << "prop" << endl;
       bool validType = false;
 
       if( typeName == "" ){
@@ -58,16 +51,9 @@ cout << "prop" << endl;
         it.mProps[matches[TYPE_IDX]] = matches[TRAIT_VALUE_IDX];
       }
     } else if( string( matches[PROP_TAG_IDX] ) == string( "" ) && string( matches[CONTENT_IDX] ) != "" ){
-cout << "obj" << endl;
       findObjs( matches[CONTENT_IDX], it.mItems[matches[TRAIT_VALUE_IDX]], matches[TYPE_IDX] );
     } else {
       //TODO throw syntax error
-cout << "property tag\t";
-cout << string( matches[PROP_TAG_IDX] ) << endl;
-cout << "content tag\t";
-cout << string( matches[CONTENT_IDX] ) << endl;
-cout << "source text\t";
-cout << text << endl;
       throw undefined_type( "syntax error!" );
     }
 
