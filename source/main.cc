@@ -1,15 +1,15 @@
 #include<string>
 #include<iostream>
 #include<vector>
+#include<array>
+#include<algorithm>
 
 #define CATCH_CONFIG_MAIN
 #include<catch.hpp>
 
 #include"config_parse.hh"
 #include"xml_parse.hh"
-
-#include<array>
-#include<algorithm>
+#include"xml_lexer.hh"
 
 using namespace std;
 
@@ -79,9 +79,9 @@ TEST_CASE( "XML", "xml" ){
   string rname( "RES" );
 
   xp.add_structure( cpuname, rname, "port" );
-  xp.add_structure( cpuname, "", "timer" );
-  xp.add_structure( cpuname, "", "adc" );
-  xp.add_structure( rname, "", "value" );
+  xp.add_structure( cpuname, "timer" );
+  xp.add_structure( cpuname, "adc" );
+  xp.add_structure( rname, "value" );
 
   //xp.parse_xml( "data/config.xml" );
 
@@ -140,5 +140,22 @@ TEST_CASE( "TEMP", "testing" ){
 
     ++textIter;
   }
+}
+
+TEST_CASE( "", "" ){
+  xml_lexer lex;
+
+  lex.lex( " << <=<\\\"asdf\"/>/>/>" );
+  auto it = lex.begin();
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::SYMBOL );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
+  REQUIRE( ( it )->first == TOKEN_CLASS::STRING );
+  REQUIRE( ( it++ )->second == "asdf" );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == TOKEN_CLASS::CLOSE_BRACKET );
 }
 

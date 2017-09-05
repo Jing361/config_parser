@@ -40,6 +40,9 @@ private:
 public:
   void add_structure( const std::string& name, const std::string& itm,
                                                const std::string& prp );
+  void add_structure( const std::string& name, const std::string& prp ){
+    add_structure( name, "", prp );
+  }
 
   item get_structure(){
     return mItem;

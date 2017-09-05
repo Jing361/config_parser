@@ -1,0 +1,16 @@
+#ifndef __XML_TOKEN_TYPE_HH__
+#define __XML_TOKEN_TYPE_HH__
+
+enum class TOKEN_CLASS{
+  NONE,
+  NAME,
+  OPEN_BRACKET,
+  END_BRACKET,
+  CLOSE_BRACKET,
+  SYMBOL,
+  STRING,
+  WORD,
+};
+
+#endif
+
