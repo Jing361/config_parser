@@ -1,3 +1,4 @@
+#include<iostream>
 #include<fstream>
 #include<regex>
 
@@ -26,52 +27,67 @@ void xml_parse::add_structure( const string& name, const string& itm, const stri
   }
 }
 
-void xml_parse::findObjs( const string& inputText, item& it, const string& typeName ){
-  regex rexp( "<(/?)\\s*(\\w+)\\s+(\\w+)\\s*=\\s*(\"?)(\\w+)\\4\\s*>(?:\\s*([\\s\\w<>=\\\\/\"]+)\\s*<\\\\\\2>)?" );
-  smatch matches;
-  string text = inputText;
+void xml_parse::parse_xml(){
+  bool isEof = false;
 
-  while( regex_search( text, matches, rexp ) ){
-    if( string( matches[PROP_TAG_IDX] ) == string( "/" ) && string( matches[CONTENT_IDX] ) == "" ){
-      bool validType = false;
+  while( !isEof ){
+    switch( mCurTok->first ){
+    case XML_TOKEN::OPEN_BRACKET:
+      handle_open_bracket();
+    break;
 
-      if( typeName == "" ){
-        validType = true;
-      } else {
-        string name( matches[TYPE_IDX] );
+    case XML_TOKEN::ONE_LINE_BRACKET:
+      handle_tag();
+    break;
 
-        try{
-          validType = ( mTypes.at( typeName ).mProps.count( name ) == 1 );
-        } catch( out_of_range ) {
-          throw undefined_type( name );
-        }
-      }
-
-      if( validType ){
-        it.mProps[matches[TYPE_IDX]] = matches[TRAIT_VALUE_IDX];
-      }
-    } else if( string( matches[PROP_TAG_IDX] ) == string( "" ) && string( matches[CONTENT_IDX] ) != "" ){
-      findObjs( matches[CONTENT_IDX], it.mItems[matches[TRAIT_VALUE_IDX]], matches[TYPE_IDX] );
-    } else {
-      //TODO throw syntax error
-      throw undefined_type( "syntax error!" );
+    default:
+      cout << "parse wat" << endl;
+    break;
     }
-
-    text = matches.suffix().str();
   }
 }
 
-void xml_parse::parse_xml( const string& fileName ){
-  fstream file( fileName );
-  string text;
+void xml_parse::handle_open_bracket(){
+  item itm;
+}
 
-  file.seekg( 0, ios::end );
-  text.reserve( file.tellg() );
-  file.seekg( 0, ios::beg );
+void xml_parse::handle_tag(){
+  item itm;
 
-  text.assign( istreambuf_iterator<char>( file ),
-               istreambuf_iterator<char>() );
+  // skip < token
+  ++mCurTok;
+  // read tag name
+  auto type_data = mTypes.at( mCurTok->second );
+  ++mCurTok;
 
-  findObjs( text, mItem );
+  switch( mCurTok->first ){
+  // for a word or single line, parse properties, then jump end bracket
+  //  if just end bracket, skip.
+  case XML_TOKEN::WORD:
+  case XML_TOKEN::ONE_LINE_BRACKET:
+    parse_property( type_data, itm );
+  case XML_TOKEN::END_BRACKET:
+    ++mCurTok;
+  break;
+
+  default:
+    cout << "handle wat" << endl;
+  break;
+  }
+}
+
+void xml_parse::parse_property( const type& typ, item& itm ){
+  while( mCurTok->first != XML_TOKEN::END_BRACKET ){
+    string prop = ( mCurTok++ )->second;
+
+    /*! @todo add exception safety */
+    if( ( typ.mProps.count( prop ) ) &&
+        ( ( mCurTok++ )->second == "=" ) &&
+        ( ( mCurTok->first == XML_TOKEN::WORD ) ||
+          ( mCurTok->first == XML_TOKEN::STRING ) ) ){
+      itm.mProps[prop] = mCurTok->second;
+      ++mCurTok;
+    }
+  }
 }
 

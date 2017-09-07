@@ -9,7 +9,7 @@
 
 class xml_lexer{
 private:
-  std::vector<std::pair<TOKEN_CLASS, std::string> > mTokens;
+  std::vector<std::pair<XML_TOKEN, std::string> > mTokens;
 
 public:
   void lex( const std::string& text );

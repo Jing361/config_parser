@@ -147,15 +147,15 @@ TEST_CASE( "", "" ){
 
   lex.lex( " << <=<\\\"asdf\"/>/>/>" );
   auto it = lex.begin();
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::SYMBOL );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::OPEN_BRACKET );
-  REQUIRE( ( it )->first == TOKEN_CLASS::STRING );
+  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::SYMBOL );
+  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+  REQUIRE( ( it )->first == XML_TOKEN::STRING );
   REQUIRE( ( it++ )->second == "asdf" );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::CLOSE_BRACKET );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::CLOSE_BRACKET );
-  REQUIRE( ( it++ )->first == TOKEN_CLASS::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
 }
 

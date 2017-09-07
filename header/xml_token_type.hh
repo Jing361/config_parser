@@ -1,12 +1,13 @@
-#ifndef __XML_TOKEN_TYPE_HH__
-#define __XML_TOKEN_TYPE_HH__
+#ifndef __XML_TOKEN_HH__
+#define __XML_TOKEN_HH__
 
-enum class TOKEN_CLASS{
+enum class XML_TOKEN{
   NONE,
   NAME,
   OPEN_BRACKET,
   END_BRACKET,
   CLOSE_BRACKET,
+  ONE_LINE_BRACKET,
   SYMBOL,
   STRING,
   WORD,

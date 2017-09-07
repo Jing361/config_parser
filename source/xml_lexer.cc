@@ -6,7 +6,7 @@
 using namespace std;
 
 void xml_lexer::lex( const string& text ){
-  TOKEN_CLASS cls = TOKEN_CLASS::NONE;
+  XML_TOKEN cls = XML_TOKEN::NONE;
 
   for( auto it = text.begin(); it != text.end(); ++it ){
     string token;
@@ -14,27 +14,28 @@ void xml_lexer::lex( const string& text ){
     if( isspace( *it ) ){
       continue;
     } else if( *it == '<' ) {
-      cls = TOKEN_CLASS::OPEN_BRACKET;
       if( *(it + 1) == '\\' ){
+        cls = XML_TOKEN::ONE_LINE_BRACKET;
         token = "<\\";
         ++it;
       } else {
+        cls = XML_TOKEN::OPEN_BRACKET;
         token = "<";
       }
     } else if( *it == '/' ) {
       if( *(it + 1) == '>' ){
-        cls = TOKEN_CLASS::CLOSE_BRACKET;
+        cls = XML_TOKEN::CLOSE_BRACKET;
         token = "/>";
         ++it;
       } else {
         //error out
       }
     } else if( *it == '>' ) {
-      cls = TOKEN_CLASS::END_BRACKET;
+      cls = XML_TOKEN::END_BRACKET;
       token = ">";
     } else if( *it == '=' || *it == '\"' ) {
       if( *it == '\"' ){
-        cls = TOKEN_CLASS::STRING;
+        cls = XML_TOKEN::STRING;
         ++it;
         while( *it != '\"' ){
           token += *it;
@@ -42,10 +43,10 @@ void xml_lexer::lex( const string& text ){
         }
       } else {
         token = string( {*it} );
-        cls = TOKEN_CLASS::SYMBOL;
+        cls = XML_TOKEN::SYMBOL;
       }
     } else if( isalnum( *it ) ){
-      cls = TOKEN_CLASS::WORD;
+      cls = XML_TOKEN::WORD;
       do{
         token+= *it;
         ++it;
