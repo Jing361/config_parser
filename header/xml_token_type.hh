@@ -11,6 +11,7 @@ enum class XML_TOKEN{
   SYMBOL,
   STRING,
   WORD,
+  FINAL,
 };
 
 #endif

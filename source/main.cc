@@ -142,12 +142,13 @@ TEST_CASE( "TEMP", "testing" ){
   }
 }
 
-TEST_CASE( "", "" ){
+TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   xml_lexer lex;
   string test( " << <=<\\\"asdf\"/>/>/>" );
   string text;
 
   lex.lex( test );
+  lex.finalize();
   auto it = lex.begin();
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
@@ -179,5 +180,39 @@ TEST_CASE( "", "" ){
   REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
 
   REQUIRE( text == "<<<=<\\asdf/>/>/>" );
+}
+
+TEST_CASE( "", "[xml parser]" ){
+  xml_parse xp;
+  xml_lexer xl;
+
+  string xml1( "<CPU name = \"foo\">\n</CPU>" );
+  string xml2( "<CPU>\n<\\name = \"foo\">\n</CPU>" );
+
+  xp.add_structure( "CPU", "name" );
+
+  SECTION( "" ){
+    xl.lex( xml1 );
+    xl.finalize();
+
+    xp.read( xl.begin(), xl.end() );
+    xp.parse_xml();
+
+    item itm = xp.get_structure();
+
+    REQUIRE( itm.mProps["name"] == "foo" );
+  }
+
+  SECTION( "" ){
+    xl.lex( xml2 );
+    xl.finalize();
+
+    xp.read( xl.begin(), xl.end() );
+    xp.parse_xml();
+
+    item itm = xp.get_structure();
+
+    REQUIRE( itm.mProps["name"] == "foo" );
+  }
 }
 

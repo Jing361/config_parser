@@ -40,6 +40,10 @@ void xml_parse::parse_xml(){
       handle_tag();
     break;
 
+    case XML_TOKEN::FINAL:
+      isEof = true;
+    break;
+
     default:
       cout << "parse wat" << endl;
     break;

@@ -14,18 +14,18 @@ void xml_lexer::lex( const string& text ){
     if( isspace( *it ) ){
       continue;
     } else if( *it == '<' ) {
-      if( *(it + 1) == '\\' ){
+      if( *(it + 1) == '/' ){
         cls = XML_TOKEN::ONE_LINE_BRACKET;
-        token = "<\\";
+        token = "</";
         ++it;
       } else {
         cls = XML_TOKEN::OPEN_BRACKET;
         token = "<";
       }
-    } else if( *it == '/' ) {
+    } else if( *it == '\\' ) {
       if( *(it + 1) == '>' ){
         cls = XML_TOKEN::CLOSE_BRACKET;
-        token = "/>";
+        token = "\\>";
         ++it;
       } else {
         //error out
@@ -59,11 +59,18 @@ void xml_lexer::lex( const string& text ){
   }
 }
 
+void xml_lexer::finalize(){
+  mTokens.emplace_back( XML_TOKEN::FINAL, "" );
+}
+
 decltype( xml_lexer::mTokens )::iterator xml_lexer::begin(){
   return mTokens.begin();
 }
 
 decltype( xml_lexer::mTokens )::iterator xml_lexer::end(){
-  return mTokens.begin();
+  if( mTokens.back().first != XML_TOKEN::FINAL ){
+    throw EOF_exception();
+  }
+  return mTokens.end();
 }
 

@@ -4,8 +4,16 @@
 #include<string>
 #include<vector>
 #include<utility>
+#include<stdexcept>
 
 #include"xml_token_type.hh"
+
+class EOF_exception : public std::domain_error{
+public:
+  EOF_exception():
+    std::domain_error( "No end of file at end of token stream." ){
+  }
+};
 
 class xml_lexer{
 private:
@@ -13,6 +21,8 @@ private:
 
 public:
   void lex( const std::string& text );
+
+  void finalize();
 
   decltype( mTokens )::iterator begin();
   decltype( mTokens )::iterator end();
