@@ -1,13 +1,13 @@
 <CPU name = "CPU1">
   <RES name = "R1">
-    <\value val = 1>
+    <value val = 1/>
   </RES>
-  <\port name = "A">
-  <\adc name = "1">
-  <\timer name = "1">
+  <port name = "A"/>
+  <adc name = "1"/>
+  <timer name = "1"/>
 </CPU>
 
 <CPU name="CPU2">
-  <\port name = "C">
+  <port name = "C"/>
 </CPU>
 

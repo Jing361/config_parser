@@ -13,27 +13,27 @@ void xml_lexer::lex( const string& text ){
 
     if( isspace( *it ) ){
       continue;
-    } else if( *it == '<' ) {
-      if( *(it + 1) == '/' ){
-        cls = XML_TOKEN::ONE_LINE_BRACKET;
+    } else if( *it == '<' ){
+      if( *( it + 1 ) == '/' ){
+        cls = XML_TOKEN::CLOSE_BRACKET;
         token = "</";
         ++it;
       } else {
         cls = XML_TOKEN::OPEN_BRACKET;
         token = "<";
       }
-    } else if( *it == '\\' ) {
-      if( *(it + 1) == '>' ){
-        cls = XML_TOKEN::CLOSE_BRACKET;
-        token = "\\>";
+    } else if( *it == '/' ){
+      if( *( it + 1 ) == '>' ){
+        cls = XML_TOKEN::ONE_LINE_CLOSE;
+        token = "/>";
         ++it;
       } else {
-        //error out
+        //error
       }
-    } else if( *it == '>' ) {
+    } else if( *it == '>' ){
       cls = XML_TOKEN::END_BRACKET;
       token = ">";
-    } else if( *it == '=' || *it == '\"' ) {
+    } else if( *it == '=' || *it == '\"' ){
       if( *it == '\"' ){
         cls = XML_TOKEN::STRING;
         ++it;

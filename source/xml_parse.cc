@@ -53,6 +53,10 @@ void xml_parse::parse_xml(){
 
 void xml_parse::handle_open_bracket(){
   item itm;
+
+  //handle_tag();
+
+  //while( mCurTok->first != 
 }
 
 void xml_parse::handle_tag(){

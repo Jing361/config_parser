@@ -144,7 +144,7 @@ TEST_CASE( "TEMP", "testing" ){
 
 TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   xml_lexer lex;
-  string test( " << <=<\\\"asdf\"/>/>/>" );
+  string test( " <<\\</= \"asdf\"> ><>" );
   string text;
 
   lex.lex( test );
@@ -154,32 +154,31 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
 
   text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::ONE_LINE_BRACKET );
 
   text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
 
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::SYMBOL );
-
-  text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::ONE_LINE_BRACKET );
-  
 
   text += it->second;
   REQUIRE( ( it )->first == XML_TOKEN::STRING );
 
   REQUIRE( ( it++ )->second == "asdf" );
   text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
 
   text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
 
   text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
 
-  REQUIRE( text == "<<<=<\\asdf/>/>/>" );
+  text += it->second;
+  REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
+
+  REQUIRE( text == "<<\\</=asdf>><>" );
 }
 
 TEST_CASE( "", "[xml parser]" ){
