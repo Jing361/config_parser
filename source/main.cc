@@ -144,18 +144,40 @@ TEST_CASE( "TEMP", "testing" ){
 
 TEST_CASE( "", "" ){
   xml_lexer lex;
+  string test( " << <=<\\\"asdf\"/>/>/>" );
+  string text;
 
-  lex.lex( " << <=<\\\"asdf\"/>/>/>" );
+  lex.lex( test );
   auto it = lex.begin();
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::SYMBOL );
-  REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
+
+  text += it->second;
+  REQUIRE( ( it++ )->first == XML_TOKEN::ONE_LINE_BRACKET );
+  
+
+  text += it->second;
   REQUIRE( ( it )->first == XML_TOKEN::STRING );
+
   REQUIRE( ( it++ )->second == "asdf" );
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+
+  text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
+
+  REQUIRE( text == "<<<=<\\asdf/>/>/>" );
 }
 
