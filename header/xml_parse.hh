@@ -29,8 +29,10 @@ private:
   std::vector<std::pair<XML_TOKEN, std::string> > mTokens;
   decltype( mTokens )::iterator mCurTok;
 
-  void xml_parse::parse_attributes( const type& typ, item& itm );
-  void handle_tag();
+  void handle_tag( item& itm );
+
+  void parse_elements( const type& typ, item& itm );
+  void parse_attributes( const type& typ, item& itm );
 
 public:
   template<typename inputIter>

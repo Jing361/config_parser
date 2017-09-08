@@ -10,11 +10,12 @@ void xml_parse::add_structure( const std::string& name, const std::string& sub )
 
 void xml_parse::parse_xml(){
   bool isEof = false;
+  item itm;
 
   while( !isEof ){
     switch( mCurTok->first ){
     case XML_TOKEN::OPEN_BRACKET:
-      handle_tag();
+      handle_tag( itm );
     break;
 
     case XML_TOKEN::FINAL:
@@ -28,29 +29,34 @@ void xml_parse::parse_xml(){
   }
 }
 
-void xml_parse::handle_tag(){
-  item itm;
+void xml_parse::handle_tag( item& itm){
+  string tag;
 
   // skip < token
   ++mCurTok;
+  tag = mCurTok->second;
   // read tag name
-  auto type_data = mTypes.at( mCurTok->second );
+  auto type_data = mTypeDict.at( tag );
   ++mCurTok;
 
-  switch( mCurTok->first ){
-  // for a word or single line, parse properties, then jump end bracket
-  //  if just end bracket, skip.
-  case XML_TOKEN::WORD:
-  case XML_TOKEN::ONE_LINE_BRACKET:
-    parse_attributes( type_data, itm );
-  case XML_TOKEN::END_BRACKET:
-    ++mCurTok;
-  break;
+  parse_attributes( type_data, itm );
+  // skip >
+  ++mCurTok;
+  parse_elements( type_data, itm );
 
-  default:
-    cout << "handle wat" << endl;
-  break;
+  while( mCurTok->first != XML_TOKEN::CLOSE_BRACKET ){
+    handle_tag( itm );
   }
+  ++mCurTok;
+  if( ( mCurTok++ )->second == tag &&
+      ( mCurTok++ )->first == XML_TOKEN::END_BRACKET ){
+  } else {
+    //error!
+  }
+}
+
+void xml_parse::parse_elements( const type& typ, item& itm ){
+  
 }
 
 void xml_parse::parse_attributes( const type& typ, item& itm ){
