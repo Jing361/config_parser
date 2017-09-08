@@ -2,6 +2,9 @@
   <RES name = "R1">
     <value val = 1/>
   </RES>
+  <RES name = "R2">
+    <value val = 1/>
+  </RES>
   <port name = "A"/>
   <adc name = "1"/>
   <timer name = "1"/>

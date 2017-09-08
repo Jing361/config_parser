@@ -1,5 +1,5 @@
-#ifndef __XML_PARSE__
-#define __XML_PARSE__
+#ifndef __XML_PARSE_HH__
+#define __XML_PARSE_HH__
 
 #include<map>
 #include<set>
@@ -9,14 +9,11 @@
 #include<xml_token_type.hh>
 
 struct item{
-  std::map<std::string, item> mItems;
-  std::map<std::string, std::string> mProps;
+  std::multimap<std::string, item> mSubItems;
+  std::multimap<std::string, std::string> mAttributes;
 };
 
-struct type{
-  std::set<std::string> mItems;
-  std::set<std::string> mProps;
-};
+using type = std::set<std::string>;
 
 class undefined_type : public std::out_of_range{
 public:
@@ -28,13 +25,11 @@ public:
 class xml_parse{
 private:
   item mItem;
-  std::map<std::string, type> mTypes;
+  std::map<std::string, type> mTypeDict;
   std::vector<std::pair<XML_TOKEN, std::string> > mTokens;
   decltype( mTokens )::iterator mCurTok;
 
-  void parse_property( const type& typ, item& itm );
-
-  void handle_open_bracket();
+  void xml_parse::parse_attributes( const type& typ, item& itm );
   void handle_tag();
 
 public:
@@ -44,17 +39,13 @@ public:
     mCurTok = mTokens.begin();
   }
 
-  void add_structure( const std::string& name, const std::string& itm,
-                                               const std::string& prp );
-  void add_structure( const std::string& name, const std::string& prp ){
-    add_structure( name, "", prp );
-  }
+  void add_structure( const std::string& name, const std::string& sub );
 
   item get_structure(){
     return mItem;
   }
 
-  void parse_xml();
+  item parse_xml();
 };
 
 #endif
