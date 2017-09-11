@@ -7,9 +7,10 @@
 #define CATCH_CONFIG_MAIN
 #include<catch.hpp>
 
-#include"config_parse.hh"
-#include"xml_parse.hh"
-#include"xml_lexer.hh"
+#include<config_parse.hh>
+#include<xml_parse.hh>
+#include<xml_lexer.hh>
+#include<xml_token_type.hh>
 
 using namespace std;
 
@@ -75,19 +76,34 @@ TEST_CASE( "basics", "start" ){
 
 TEST_CASE( "XML", "xml" ){
   xml_parse xp;
+  xml_lexer xl;
   string cpuname( "CPU" );
   string rname( "RES" );
+  string xml;
+  fstream f_xml( "data/config.xml" );
 
-  xp.add_structure( cpuname, rname, "port" );
+  f_xml.seekg( 0, ios::end );
+  xml.reserve( f_xml.tellg() );
+  f_xml.seekg( 0, ios::beg );
+
+  xml.assign( istreambuf_iterator<char>( f_xml ),
+              istreambuf_iterator<char>() );
+
+  xl.lex( xml );
+  xl.finalize();
+
+  xp.add_structure( cpuname, "name" );
+  xp.add_structure( cpuname, "port" );
   xp.add_structure( cpuname, "timer" );
   xp.add_structure( cpuname, "adc" );
   xp.add_structure( rname, "value" );
 
-  //xp.parse_xml( "data/config.xml" );
+  xp.parse_xml( xl.begin(), xl.end() );
+  auto itm = xp.get_structure();
 
-  for( auto it : xp.get_structure().mItems ){
+  for( auto it : itm.mSubItems ){
     cout << it.first << '\t';
-    for( auto jt : it.second.mProps ){
+    for( auto jt : it.second.mAttributes ){
       cout << jt.first << '\t' << jt.second << endl;
     }
   }
@@ -144,7 +160,7 @@ TEST_CASE( "TEMP", "testing" ){
 
 TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   xml_lexer lex;
-  string test( " <<\\</= \"asdf\"> ><>" );
+  string test( " <</= \"asdf\">/> <>" );
   string text;
 
   lex.lex( test );
@@ -152,9 +168,6 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   auto it = lex.begin();
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
-
-  text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::ONE_LINE_BRACKET );
 
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::CLOSE_BRACKET );
@@ -170,7 +183,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
 
   text += it->second;
-  REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
+  REQUIRE( ( it++ )->first == XML_TOKEN::ONE_LINE_CLOSE );
 
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
@@ -178,7 +191,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
 
-  REQUIRE( text == "<<\\</=asdf>><>" );
+  REQUIRE( text == "<</=\"asdf\">/><>" );
 }
 
 TEST_CASE( "", "[xml parser]" ){
@@ -186,7 +199,7 @@ TEST_CASE( "", "[xml parser]" ){
   xml_lexer xl;
 
   string xml1( "<CPU name = \"foo\">\n</CPU>" );
-  string xml2( "<CPU>\n<\\name = \"foo\">\n</CPU>" );
+  string xml2( "<CPU>\n<name = \"foo\"/>\n</CPU>" );
 
   xp.add_structure( "CPU", "name" );
 
@@ -199,7 +212,7 @@ TEST_CASE( "", "[xml parser]" ){
 
     item itm = xp.get_structure();
 
-    REQUIRE( itm.mProps["name"] == "foo" );
+    REQUIRE( itm.mAttributes["name"] == "foo" );
   }
 
   SECTION( "" ){
@@ -211,7 +224,7 @@ TEST_CASE( "", "[xml parser]" ){
 
     item itm = xp.get_structure();
 
-    REQUIRE( itm.mProps["name"] == "foo" );
+    REQUIRE( itm.mAttributes["name"] == "foo" );
   }
 }
 

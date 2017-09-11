@@ -4,13 +4,14 @@
 #include<map>
 #include<set>
 #include<string>
+#include<vector>
 #include<exception>
 
 #include<xml_token_type.hh>
 
 struct item{
   std::multimap<std::string, item> mSubItems;
-  std::multimap<std::string, std::string> mAttributes;
+  std::map<std::string, std::string> mAttributes;
 };
 
 using type = std::set<std::string>;
@@ -47,7 +48,14 @@ public:
     return mItem;
   }
 
-  item parse_xml();
+  void parse_xml();
+
+  template<typename inputIter>
+  void parse_xml( inputIter first, inputIter last ){
+    read( first, last );
+
+    parse_xml();
+  }
 };
 
 #endif
