@@ -5,7 +5,7 @@
 #include<set>
 #include<string>
 #include<vector>
-#include<exception>
+#include<stdexcept>
 
 #include<xml_token_type.hh>
 
@@ -29,6 +29,13 @@ public:
   /* @todo add type name to report string */
   undefined_attribute( const std::string& name ):
     std::out_of_range( std::string( "Undefined attribute found:\t" ) + name ){
+  }
+};
+
+class parsing_error : public std::runtime_error{
+public:
+  parsing_error( const std::string& what ):
+    runtime_error( what ){
   }
 };
 

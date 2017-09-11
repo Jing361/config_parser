@@ -1,9 +1,9 @@
 <CPU name = "CPU1">
   <RES name = "R1">
-    <value val = 1/>
+    <value>1</value>
   </RES>
   <RES name = "R2">
-    <value val = 1/>
+    <value>2</value>
   </RES>
   <port name = "A"/>
   <adc name = "1"/>

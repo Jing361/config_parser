@@ -56,16 +56,17 @@ void xml_parse::handle_tag( item& itm){
     ++mCurTok;
 
     // check tag is correct, and is closed correctly
-    if( ( mCurTok++ )->second == tag &&
+    string close_tag = ( mCurTok++ )->second;
+    if( close_tag == tag &&
         ( mCurTok++ )->first == XML_TOKEN::END_BRACKET ){
     } else {
-      //error!
+      throw parsing_error( string( "Closing tag:\t" ) + close_tag + "\nDoes not close current tag:\t" + tag );
     }
   }
 }
 
 void xml_parse::parse_attributes( const type& typ, item& itm ){
-  while( mCurTok->first != XML_TOKEN::END_BRACKET ||
+  while( mCurTok->first != XML_TOKEN::END_BRACKET &&
          mCurTok->first != XML_TOKEN::ONE_LINE_CLOSE ){
     string attr = ( mCurTok++ )->second;
 
