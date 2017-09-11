@@ -3,7 +3,6 @@
 
 enum class XML_TOKEN{
   NONE,
-  NAME,
   OPEN_BRACKET,
   END_BRACKET,
   CLOSE_BRACKET,

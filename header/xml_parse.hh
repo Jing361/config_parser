@@ -48,7 +48,7 @@ private:
 
   void handle_tag( item& itm );
 
-  void parse_attributes( const type& typ, item& itm );
+  void parse_attributes( item& itm );
 
 public:
   template<typename inputIter>

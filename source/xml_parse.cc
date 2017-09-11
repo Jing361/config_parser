@@ -26,6 +26,9 @@ void xml_parse::parse_xml(){
     break;
     }
   }
+/* @todo add structure checking */
+// after the xml tree has been parsed, it should be verified to be consistent
+//   with provided specifications
 }
 
 void xml_parse::handle_tag( item& itm){
@@ -42,14 +45,14 @@ void xml_parse::handle_tag( item& itm){
 
   // read tag data
   tag = ( mCurTok++ )->second;
-  auto type_data = mTypeDict.at( tag );
+  item& new_itm = itm.sub_items.insert( {tag, item()} )->second;
 
-  parse_attributes( type_data, itm );
+  parse_attributes( new_itm );
 
   // skip >
   if( ( mCurTok++ )->first != XML_TOKEN::ONE_LINE_CLOSE ){
     while( mCurTok->first != XML_TOKEN::CLOSE_BRACKET ){
-      handle_tag( itm );
+      handle_tag( new_itm );
     }
 
     // skip </
@@ -65,18 +68,13 @@ void xml_parse::handle_tag( item& itm){
   }
 }
 
-void xml_parse::parse_attributes( const type& typ, item& itm ){
+void xml_parse::parse_attributes( item& itm ){
   while( mCurTok->first != XML_TOKEN::END_BRACKET &&
          mCurTok->first != XML_TOKEN::ONE_LINE_CLOSE ){
     string attr = ( mCurTok++ )->second;
 
-    if( !typ.count( attr ) ){
-      throw undefined_attribute( attr );
-    }
-
     /*! @todo add exception safety */
-    if( ( typ.count( attr ) ) &&
-        ( ( mCurTok++ )->second == "=" ) &&
+    if( ( ( mCurTok++ )->second == "=" ) &&
         ( ( mCurTok->first == XML_TOKEN::WORD ) ||
           ( mCurTok->first == XML_TOKEN::STRING ) ) ){
       itm.attributes.insert( {attr, mCurTok->second} );
