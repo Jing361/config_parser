@@ -101,9 +101,9 @@ TEST_CASE( "XML", "xml" ){
   xp.parse_xml( xl.begin(), xl.end() );
   auto itm = xp.get_structure();
 
-  for( auto it : itm.mSubItems ){
+  for( auto it : itm.sub_items ){
     cout << it.first << '\t';
-    for( auto jt : it.second.mAttributes ){
+    for( auto jt : it.second.attributes ){
       cout << jt.first << '\t' << jt.second << endl;
     }
   }
@@ -191,7 +191,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::END_BRACKET );
 
-  REQUIRE( text == "<</=\"asdf\">/><>" );
+  REQUIRE( text == "<</=asdf>/><>" );
 }
 
 TEST_CASE( "", "[xml parser]" ){
@@ -199,7 +199,7 @@ TEST_CASE( "", "[xml parser]" ){
   xml_lexer xl;
 
   string xml1( "<CPU name = \"foo\">\n</CPU>" );
-  string xml2( "<CPU>\n<name = \"foo\"/>\n</CPU>" );
+  string xml2( "<CPU>\n<name>\"foo\"</name>\n</CPU>" );
 
   xp.add_structure( "CPU", "name" );
 
@@ -212,7 +212,7 @@ TEST_CASE( "", "[xml parser]" ){
 
     item itm = xp.get_structure();
 
-    REQUIRE( itm.mAttributes["name"] == "foo" );
+    REQUIRE( itm.attributes["name"] == "foo" );
   }
 
   SECTION( "" ){
@@ -224,7 +224,7 @@ TEST_CASE( "", "[xml parser]" ){
 
     item itm = xp.get_structure();
 
-    REQUIRE( itm.mAttributes["name"] == "foo" );
+    REQUIRE( itm.attributes["name"] == "foo" );
   }
 }
 

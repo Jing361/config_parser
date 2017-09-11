@@ -10,8 +10,9 @@
 #include<xml_token_type.hh>
 
 struct item{
-  std::multimap<std::string, item> mSubItems;
-  std::map<std::string, std::string> mAttributes;
+  std::multimap<std::string, item> sub_items;
+  std::map<std::string, std::string> attributes;
+  std::string data;
 };
 
 using type = std::set<std::string>;
@@ -20,6 +21,14 @@ class undefined_type : public std::out_of_range{
 public:
   undefined_type( const std::string& name ):
     std::out_of_range( std::string( "Undefined type found: " ) + name ){
+  }
+};
+
+class undefined_attribute : public std::out_of_range{
+public:
+  /* @todo add type name to report string */
+  undefined_attribute( const std::string& name ):
+    std::out_of_range( std::string( "Undefined attribute found:\t" ) + name ){
   }
 };
 
@@ -32,7 +41,6 @@ private:
 
   void handle_tag( item& itm );
 
-  void parse_elements( const type& typ, item& itm );
   void parse_attributes( const type& typ, item& itm );
 
 public:
