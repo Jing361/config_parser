@@ -110,55 +110,6 @@ TEST_CASE( "XML", "xml" ){
   }
 }
 
-typedef enum{
-  TAG_TOKEN,
-  OPEN_BRACKET_TOKEN,
-  CLOSED_BRACKET_TOKEN,
-  SINGLE_LINE_TOKEN,
-  QUOTE_TOKEN,
-  EQUALS_TOKEN,
-  STRING_TOKEN,
-  END_TAG_OPEN_TOKEN,
-  MAX_TOKEN,
-} TOKEN_t;
-
-TEST_CASE( "TEMP", "testing" ){
-  vector<pair<TOKEN_t, string> > tokens;
-  array<string, 6> validTokens{ "<", ">", "</", "<\\", "=", "\"" };
-  string text( "<AAA name = charles>\n\t<\\BBB things = stuff>\n\t<\\CCC stuff=\"things\">\n</AAA>\n\n<\\DDD text= letters>\n\n<CPU name = \"CPU1\">\n\t<RES name=\"R1\">\n\t\t<\\value val = 1K>\n\t</RES>\n\t<\\port name = \"A\">\n\t<\\timer name =1>\n\t<\\adc name=1>\n</CPU>\n\n<CPU name=\"CPU2\">\n\t<\\port name = \"C\">\n</CPU>\n\n" );
-
-  auto textIter = text.begin();
-  while( textIter != text.end() ){
-    TOKEN_t token;
-    string data;
-
-    if( *textIter == '<' ){
-      data += *textIter;
-      if( *( textIter + 1 ) == '/' ){
-        token = END_TAG_OPEN_TOKEN;
-        data += *textIter;
-      } else if( *( textIter + 1 ) == '\\' ){
-        token = SINGLE_LINE_TOKEN;
-        data += *textIter;
-      } else {
-        token = OPEN_BRACKET_TOKEN;
-      }
-    } else if( *textIter == '>' ){
-      token = CLOSED_BRACKET_TOKEN;
-    } else if( *textIter == '=' ){
-      token = EQUALS_TOKEN;
-    } else if( *textIter == '\"' ){
-      token = QUOTE_TOKEN;
-    } else if( isalpha( *textIter ) ){
-      
-    }
-
-    tokens.emplace_back( token, string( textIter, textIter + 1 ) );
-
-    ++textIter;
-  }
-}
-
 TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   xml_lexer lex;
   string test( " <</= \"asdf\">/> <>" );
