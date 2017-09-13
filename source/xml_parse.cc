@@ -36,7 +36,8 @@ void xml_parse::handle_tag( item& itm){
 
   if( mCurTok->first != XML_TOKEN::OPEN_BRACKET ){
     while( mCurTok->first != XML_TOKEN::CLOSE_BRACKET ){
-      itm.data += mCurTok->second;
+      itm.data += mCurTok->second + " ";
+      ++mCurTok;
     }
     return;
   }
