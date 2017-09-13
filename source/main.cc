@@ -166,6 +166,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
 
   lex.lex( test );
   lex.finalize();
+
   auto it = lex.begin();
   text += it->second;
   REQUIRE( ( it++ )->first == XML_TOKEN::OPEN_BRACKET );
