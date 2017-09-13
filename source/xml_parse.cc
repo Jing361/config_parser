@@ -31,9 +31,7 @@ void xml_parse::parse_xml(){
 //   with provided specifications
 }
 
-void xml_parse::handle_tag( item& itm){
-  string tag;
-
+void xml_parse::handle_tag( item& itm ){
   if( mCurTok->first != XML_TOKEN::OPEN_BRACKET ){
     while( mCurTok->first != XML_TOKEN::CLOSE_BRACKET ){
       itm.data += mCurTok->second + " ";
@@ -45,7 +43,7 @@ void xml_parse::handle_tag( item& itm){
   ++mCurTok;
 
   // read tag data
-  tag = ( mCurTok++ )->second;
+  string tag = ( mCurTok++ )->second;
   item& new_itm = itm.sub_items.insert( {tag, item()} )->second;
 
   parse_attributes( new_itm );
