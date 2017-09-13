@@ -102,12 +102,12 @@ TEST_CASE( "XML", "xml" ){
   xp.parse_xml( xl.begin(), xl.end() );
   auto itm = xp.get_structure();
 
-  for( auto it : itm.sub_items ){
-    cout << it.first << '\t';
-    for( auto jt : it.second.attributes ){
-      cout << jt.first << '\t' << jt.second << endl;
-    }
-  }
+  REQUIRE( itm.sub_items.count( "CPU" ) == 2 );
+  auto sub_itm = itm.sub_items.lower_bound( "CPU" )->second;
+  REQUIRE( sub_itm.attributes["name"] == "CPU1" );
+  auto sub2_itm = sub_itm.sub_items.lower_bound( "RES" )->second;
+  REQUIRE( sub2_itm.attributes["name"] == "R1" );
+  REQUIRE( sub2_itm.attributes["value"] == "1" );
 }
 
 TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
@@ -152,7 +152,7 @@ TEST_CASE( "", "[xml parser]" ){
   xml_lexer xl;
 
   string xml1( "<CPU name = \"foo\">\n</CPU>" );
-  string xml2( "<CPU>\n<name>\"foo\"</name>\n</CPU>" );
+  string xml2( "<CPU>\n<name>\"bar\"</name>\n</CPU>" );
 
   xp.add_structure( "CPU", "name" );
 
@@ -163,7 +163,7 @@ TEST_CASE( "", "[xml parser]" ){
     xp.read( xl.begin(), xl.end() );
     xp.parse_xml();
 
-    item itm = xp.get_structure();
+    item itm = xp.get_structure().sub_items.lower_bound( "CPU" )->second;
 
     REQUIRE( itm.attributes["name"] == "foo" );
   }
@@ -175,9 +175,9 @@ TEST_CASE( "", "[xml parser]" ){
     xp.read( xl.begin(), xl.end() );
     xp.parse_xml();
 
-    item itm = xp.get_structure();
+    item itm = xp.get_structure().sub_items.lower_bound( "CPU" )->second;
 
-    REQUIRE( itm.attributes["name"] == "foo" );
+    REQUIRE( itm.attributes["name"] == "bar" );
   }
 }
 
