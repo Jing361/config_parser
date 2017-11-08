@@ -106,9 +106,16 @@ TEST_CASE( "XML", "[xml]" ){
   REQUIRE( sub_itm.attributes["name"] == "CPU1" );
 
   REQUIRE( sub_itm.sub_items.count( "RES" ) == 2 );
-  auto sub2_itm = sub_itm.sub_items.lower_bound( "RES" )->second;
-  REQUIRE( sub2_itm.attributes["name"] == "R1" );
-  REQUIRE( sub2_itm.attributes["value"] == "1" );
+  auto sub2_itm1 = sub_itm.sub_items.lower_bound( "RES" )->second;
+  REQUIRE( sub2_itm1.attributes["name"] == "R1" );
+  REQUIRE( sub2_itm1.attributes["value"] == "1" );
+
+  auto sub2_itm2 = sub_itm.sub_items.lower_bound( "port" )->second;
+  REQUIRE( sub2_itm2.attributes["name"] == "A" );
+  auto sub2_itm3 = sub_itm.sub_items.lower_bound( "adc" )->second;
+  REQUIRE( sub2_itm3.attributes["name"] == "1" );
+  auto sub2_itm4 = sub_itm.sub_items.lower_bound( "timer" )->second;
+  REQUIRE( sub2_itm4.attributes["name"] == "1" );
 }
 
 TEST_CASE( "Lexer detects tokens correctly", "[xml][lexer]" ){

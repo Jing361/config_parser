@@ -5,7 +5,7 @@
   </RES>
   <port name = "A"/>
   <adc name = "1"/>
-  <timer name = "1"/>
+  <timer name = 1/>
 </CPU>
 
 <CPU name="CPU2">
