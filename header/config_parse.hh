@@ -26,20 +26,24 @@ public:
  * describes a word to be found between square brackets, [].  The second
  * argument describes pieces found under that tag, using an = sign.  i.e.:
  * 
+ * @code{.ini}
  * [FOO]
  *   bar = test 
  *   value = 42 
+ * @endcode
  *
  * The above would be described as:
- * argparse ap;
+ * @code{.cpp}
+ * config_parse cp;
  *
- * ap.add_element( "FOO", "bar" );
- * ap.add_element( "FOO", "value" );
+ * cp.add_element( "FOO", "bar" );
+ * cp.add_element( "FOO", "value" );
  *
- * ap.parse_config( "filename.ini" );
+ * cp.parse_config( "filename.ini" );
  *
- * assert( ap.get_element<string>( "FOO", "bar" ) == "test" );
- * assert( ap.get_element<int>( "FOO", "value" ) == 42 );
+ * assert( cp.get_element<string>( "FOO", "bar" ) == "test" );
+ * assert( cp.get_element<int>( "FOO", "value" ) == 42 );
+ * @endcode
  */
 class config_parse{
 private:
