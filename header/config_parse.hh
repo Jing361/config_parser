@@ -79,7 +79,7 @@ public:
 
     try{
       text = mElements.at( tag ).at( name );
-    } catch( std::out_of_range ){
+    } catch( std::out_of_range& ){
       throw element_not_found( tag, name );
     }
 
@@ -100,6 +100,9 @@ public:
    */
   void parse_config( const std::string& fileName );
 };
+
+template<>
+bool config_parse::get_element<bool>( const std::string& tag, const std::string& name );
 
 #endif
 

@@ -57,3 +57,16 @@ void config_parse::parse_config( const string& fileName ){
   }
 }
 
+template<>
+bool config_parse::get_element<bool>( const std::string& tag, const std::string& name ){
+  std::string text;
+
+  try{
+    text = mElements.at( tag ).at( name );
+  } catch( std::out_of_range& ){
+    throw element_not_found( tag, name );
+  }
+
+  return ( text != "" ) && ( text != "false" );
+}
+
