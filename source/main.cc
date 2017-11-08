@@ -104,6 +104,8 @@ TEST_CASE( "XML", "[xml]" ){
   REQUIRE( itm.sub_items.count( "CPU" ) == 2 );
   auto sub_itm = itm.sub_items.lower_bound( "CPU" )->second;
   REQUIRE( sub_itm.attributes["name"] == "CPU1" );
+
+  REQUIRE( sub_itm.sub_items.count( "RES" ) == 2 );
   auto sub2_itm = sub_itm.sub_items.lower_bound( "RES" )->second;
   REQUIRE( sub2_itm.attributes["name"] == "R1" );
   REQUIRE( sub2_itm.attributes["value"] == "1" );
@@ -146,7 +148,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml][lexer]" ){
   REQUIRE( text == "<</=asdf>/><>" );
 }
 
-TEST_CASE( "", "[xml][parser]" ){
+TEST_CASE( "Attributes parsed correctly", "[xml][parser]" ){
   xml_parse xp;
   xml_lexer xl;
 
@@ -155,7 +157,7 @@ TEST_CASE( "", "[xml][parser]" ){
 
   xp.add_structure( "CPU", "name" );
 
-  SECTION( "" ){
+  SECTION( "Attributes inline" ){
     xl.lex( xml1 );
     xl.finalize();
 
@@ -167,7 +169,7 @@ TEST_CASE( "", "[xml][parser]" ){
     REQUIRE( itm.attributes["name"] == "foo" );
   }
 
-  SECTION( "" ){
+  SECTION( "Attributes separate" ){
     xl.lex( xml2 );
     xl.finalize();
 

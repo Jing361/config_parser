@@ -1,7 +1,5 @@
 <CPU name = "CPU1">
-  <RES name = "R1">
-    <value>1</value>
-  </RES>
+  <RES name = "R1" value = 1/>
   <RES name = "R2">
     <value>2</value>
   </RES>
