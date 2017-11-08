@@ -102,20 +102,25 @@ TEST_CASE( "XML", "[xml]" ){
   auto itm = xp.get_structure();
 
   REQUIRE( itm.sub_items.count( "CPU" ) == 2 );
-  auto sub_itm = itm.sub_items.lower_bound( "CPU" )->second;
-  REQUIRE( sub_itm.attributes["name"] == "CPU1" );
+  auto sub0_itm1 = itm.sub_items.lower_bound( "CPU" )->second;
+  REQUIRE( sub0_itm1.attributes["name"] == "CPU1" );
 
-  REQUIRE( sub_itm.sub_items.count( "RES" ) == 2 );
-  auto sub2_itm1 = sub_itm.sub_items.lower_bound( "RES" )->second;
+  REQUIRE( sub0_itm1.sub_items.count( "RES" ) == 2 );
+  auto sub2_itm1 = sub0_itm1.sub_items.lower_bound( "RES" )->second;
   REQUIRE( sub2_itm1.attributes["name"] == "R1" );
   REQUIRE( sub2_itm1.attributes["value"] == "1" );
 
-  auto sub2_itm2 = sub_itm.sub_items.lower_bound( "port" )->second;
+  auto sub2_itm2 = sub0_itm1.sub_items.lower_bound( "port" )->second;
   REQUIRE( sub2_itm2.attributes["name"] == "A" );
-  auto sub2_itm3 = sub_itm.sub_items.lower_bound( "adc" )->second;
+  auto sub2_itm3 = sub0_itm1.sub_items.lower_bound( "adc" )->second;
   REQUIRE( sub2_itm3.attributes["name"] == "1" );
-  auto sub2_itm4 = sub_itm.sub_items.lower_bound( "timer" )->second;
+  auto sub2_itm4 = sub0_itm1.sub_items.lower_bound( "timer" )->second;
   REQUIRE( sub2_itm4.attributes["name"] == "1" );
+
+  auto sub0_itm2 = (++( itm.sub_items.lower_bound( "CPU" ) ) )->second;
+  REQUIRE( sub0_itm2.attributes["name"] == "CPU2" );
+  auto sub0_itm3 = sub0_itm2.sub_items.lower_bound( "port" )->second;
+  REQUIRE( sub0_itm3.attributes["name"] == "C" );
 }
 
 TEST_CASE( "Lexer detects tokens correctly", "[xml][lexer]" ){
