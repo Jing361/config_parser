@@ -14,7 +14,7 @@
 
 using namespace std;
 
-TEST_CASE( "basics", "start" ){
+TEST_CASE( "basics", "[config]" ){
   config_parse cp;
   cp.add_element( "CPU", "ports" );
   cp.add_element( "CPU", "timers" );
@@ -38,7 +38,6 @@ TEST_CASE( "basics", "start" ){
   REQUIRE( cp.get_element<string>( "CPU", "adcs" ) == string( "1" ) );
   REQUIRE( cp.get_element<int>( "CPU", "adcs" ) == 1 );
   REQUIRE( cp.get_element<bool>( "CPU", "adcs" ) );
-
 
   REQUIRE( cp.get_element<string>( "aoeu", "a" ) == string( "1" ) );
   REQUIRE( cp.get_element<int>( "aoeu", "a" ) == 1 );
@@ -74,7 +73,7 @@ TEST_CASE( "basics", "start" ){
   REQUIRE( test );
 }
 
-TEST_CASE( "XML", "xml" ){
+TEST_CASE( "XML", "[xml]" ){
   xml_parse xp;
   xml_lexer xl;
   string cpuname( "CPU" );
@@ -110,7 +109,7 @@ TEST_CASE( "XML", "xml" ){
   REQUIRE( sub2_itm.attributes["value"] == "1" );
 }
 
-TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
+TEST_CASE( "Lexer detects tokens correctly", "[xml][lexer]" ){
   xml_lexer lex;
   string test( " <</= \"asdf\">/> <>" );
   string text;
@@ -147,7 +146,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml lexer]" ){
   REQUIRE( text == "<</=asdf>/><>" );
 }
 
-TEST_CASE( "", "[xml parser]" ){
+TEST_CASE( "", "[xml][parser]" ){
   xml_parse xp;
   xml_lexer xl;
 
