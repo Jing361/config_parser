@@ -52,6 +52,8 @@ private:
 
   void parse_attributes( item& itm );
 
+  void validate_structure( const std::string& str, const item& itm );
+
 public:
   template<typename inputIter>
   void read( inputIter first, inputIter last ){

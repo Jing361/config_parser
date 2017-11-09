@@ -5,6 +5,24 @@
 using namespace std;
 using namespace gsw;
 
+void xml_parse::validate_structure( const std::string& str, const item& itm ){
+  for( auto i : itm.sub_items ){
+    if( mTypeDict.at( str ).count( i.first ) == 0 ){
+      // differentiate between str fail and i.first fail
+      // should it be called undefined attribute? or sub_item?
+      throw undefined_attribute( i.first );
+    }
+
+    validate_structure( i.first, i.second );
+  }
+
+  for( auto i : itm.attributes ){
+    if( mTypeDict.at( str ).count( i.first ) == 0 ){
+      throw undefined_attribute( i.first );
+    }
+  }
+}
+
 void xml_parse::add_structure( const std::string& name, const std::string& sub ){
   mTypeDict[name].insert( sub );
 }
@@ -30,6 +48,9 @@ void xml_parse::parse_xml(){
 /* @todo add structure checking */
 // after the xml tree has been parsed, it should be verified to be consistent
 //   with provided specifications
+  for( auto i : mItem.sub_items ){
+    validate_structure( i.first, i.second );
+  }
 }
 
 void xml_parse::handle_tag( item& itm ){

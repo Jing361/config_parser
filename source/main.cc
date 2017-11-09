@@ -96,8 +96,12 @@ TEST_CASE( "XML", "[xml]" ){
   xp.add_structure( cpuname, "port" );
   xp.add_structure( cpuname, "timer" );
   xp.add_structure( cpuname, "adc" );
+  xp.add_structure( cpuname, "RES" );
   xp.add_structure( rname, "value" );
   xp.add_structure( rname, "name" );
+  xp.add_structure( "port",  "name" );
+  xp.add_structure( "adc",   "name" );
+  xp.add_structure( "timer", "name" );
 
   xp.parse_xml( xl.begin(), xl.end() );
   auto itm = xp.get_structure();
