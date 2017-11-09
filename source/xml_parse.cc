@@ -37,6 +37,8 @@ void xml_parse::handle_tag( item& itm ){
       itm.data += mCurTok->second + " ";
       ++mCurTok;
     }
+    // remove trailing space
+    itm.data.pop_back();
     return;
   }
   // skip <

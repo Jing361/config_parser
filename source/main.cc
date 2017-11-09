@@ -190,7 +190,7 @@ TEST_CASE( "Attributes parsed correctly", "[xml][parser]" ){
 
     item itm = xp.get_structure().sub_items.lower_bound( "CPU" )->second;
 
-    REQUIRE( itm.attributes["name"] == "bar" );
+    REQUIRE( itm.sub_items.lower_bound( "name" )->second.data == "bar" );
   }
 }
 
