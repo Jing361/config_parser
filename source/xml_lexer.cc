@@ -5,6 +5,7 @@
 #include"xml_lexer.hh"
 
 using namespace std;
+using namespace gsw;
 
 class undefined_token : public runtime_error{
 public:

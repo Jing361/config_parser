@@ -9,6 +9,8 @@
 
 #include<xml_token_type.hh>
 
+namespace gsw{
+
 struct item{
   std::multimap<std::string, item> sub_items;
   std::map<std::string, std::string> attributes;
@@ -72,6 +74,8 @@ public:
     parse_xml();
   }
 };
+
+}
 
 #endif
 

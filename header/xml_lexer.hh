@@ -8,6 +8,8 @@
 
 #include"xml_token_type.hh"
 
+namespace gsw{
+
 class EOF_exception : public std::domain_error{
 public:
   EOF_exception():
@@ -27,6 +29,8 @@ public:
   decltype( mTokens )::iterator begin();
   decltype( mTokens )::iterator end();
 };
+
+}
 
 #endif
 

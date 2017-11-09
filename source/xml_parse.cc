@@ -3,6 +3,7 @@
 #include"xml_parse.hh"
 
 using namespace std;
+using namespace gsw;
 
 void xml_parse::add_structure( const std::string& name, const std::string& sub ){
   mTypeDict[name].insert( sub );

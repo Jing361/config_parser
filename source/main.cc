@@ -13,6 +13,7 @@
 #include<xml_token_type.hh>
 
 using namespace std;
+using namespace gsw;
 
 TEST_CASE( "basics", "[config]" ){
   config_parse cp;
