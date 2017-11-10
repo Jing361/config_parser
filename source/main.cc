@@ -169,10 +169,11 @@ TEST_CASE( "Attributes parsed correctly", "[xml][parser]" ){
   xml_parse xp;
   xml_lexer xl;
 
-  string xml1( "<CPU name = \"foo\">\n</CPU>" );
-  string xml2( "<CPU>\n<name>\"bar\"</name>\n</CPU>" );
+  string xml1( "<CPU name = \"foo\" color = green>\n</CPU>" );
+  string xml2( "<CPU>\n<name>\"bar\"</name>\n<color>orange</color>\n</CPU>" );
 
   xp.add_structure( "CPU", "name" );
+  xp.add_structure( "CPU", "color" );
 
   SECTION( "Attributes inline" ){
     xl.lex( xml1 );
@@ -184,6 +185,7 @@ TEST_CASE( "Attributes parsed correctly", "[xml][parser]" ){
     item itm = xp.get_structure().sub_items.lower_bound( "CPU" )->second;
 
     REQUIRE( itm.attributes["name"] == "foo" );
+    REQUIRE( itm.attributes["color"] == "green" );
   }
 
   SECTION( "Attributes separate" ){
@@ -195,7 +197,8 @@ TEST_CASE( "Attributes parsed correctly", "[xml][parser]" ){
 
     item itm = xp.get_structure().sub_items.lower_bound( "CPU" )->second;
 
-    REQUIRE( itm.sub_items.lower_bound( "name" )->second.data == "bar" );
+    REQUIRE( itm.sub_items.lower_bound( "name"  )->second.data == "bar" );
+    REQUIRE( itm.sub_items.lower_bound( "color" )->second.data == "orange" );
   }
 }
 
