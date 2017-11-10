@@ -54,6 +54,7 @@ endif
 SOURCES:=$(shell find $(sourcedir) -name '*$(sourceextension)')
 OBJECTS:=$(subst $(sourcedir),$(objdir), $(subst $(sourceextension),.o, $(SOURCES)))
 DEPENDS:=$(subst $(sourcedir),$(depdir), $(subst $(sourceextension),.d, $(SOURCES)))
+CREATEDIRS:=$(objectdir) $(objdir) $(dependdir) $(depdir) $(binarydir) $(bindir)
 DIRS := $(sourcedir) $(headerdir) $(objectdir) $(objdir) $(dependdir) $(depdir) $(binarydir) $(bindir) $(librarydir)
 LIBS:=$(patsubst %,-l%,$(libraries))
 INCLUDES:=$(patsubst %,-I./%,$(includedirs))
@@ -62,14 +63,14 @@ INCLUDES:=$(patsubst %,-I./%,$(includedirs))
 
 # link everything together
 %/$(name):$(OBJECTS)
-	$(CC) $+ $(FLAGS) -o $@ $(LIBS)
+	$(CC) $+ $(FLAGS) -o $@ $(LIBS) -L$(librarydir)
 
 -include $(DEPENDS)
 
 # generate directories
-$(DIRS):
-	@echo Making directory: $@
-	@mkdir $@
+$(CREATEDIRS):
+	@echo Creating directories
+	-@mkdir -p $(CREATEDIRS)
 
 # more complicated dependency computation, so all prereqs listed
 # will also become command-less, prereq-less targets
@@ -78,7 +79,7 @@ $(DIRS):
 #   fmt -1: list words one per line
 #   sed:    strip leading spaces
 #   sed:    add trailing colons
-$(objdir)/%.o:|$(DIRS)
+$(objdir)/%.o:|$(CREATEDIRS)
 	$(CC) -c -MMD -MP -MF $(depdir)/$*.d $(sourcedir)/$*$(sourceextension) $(FLAGS) $(INCLUDES) -o $@
 
 endif
