@@ -8,7 +8,7 @@
 #include<catch.hpp>
 
 #include<config_parse.hh>
-#include<xml_parse.hh>
+#include<xml_parser.hh>
 #include<xml_lexer.hh>
 #include<xml_token_type.hh>
 
@@ -60,7 +60,7 @@ TEST_CASE( "basics", "[config]" ){
   bool test = false;
   try{
     cp.get_element<bool>( "nope", "don't_care" );
-  } catch( element_not_found ){
+  } catch( element_not_found& ){
     test = true;
   }
   REQUIRE( test );
@@ -68,14 +68,14 @@ TEST_CASE( "basics", "[config]" ){
   test = false;
   try{
     !cp.get_element<bool>( "htns", "nope" );
-  } catch( element_not_found ){
+  } catch( element_not_found& ){
     test = true;
   }
   REQUIRE( test );
 }
 
 TEST_CASE( "XML", "[xml]" ){
-  xml_parse xp;
+  xml_parser xp;
   xml_lexer xl;
   string cpuname( "CPU" );
   string rname( "RES" );
@@ -166,7 +166,7 @@ TEST_CASE( "Lexer detects tokens correctly", "[xml][lexer]" ){
 }
 
 TEST_CASE( "Attributes parsed correctly", "[xml][parser]" ){
-  xml_parse xp;
+  xml_parser xp;
   xml_lexer xl;
 
   string xml1( "<CPU name = \"foo\" color = green>\n</CPU>" );

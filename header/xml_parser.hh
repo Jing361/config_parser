@@ -1,5 +1,5 @@
-#ifndef __XML_PARSE_HH__
-#define __XML_PARSE_HH__
+#ifndef __XML_PARSER_HH__
+#define __XML_PARSER_HH__
 
 #include<map>
 #include<set>
@@ -41,7 +41,7 @@ public:
   }
 };
 
-class xml_parse{
+class xml_parser{
 private:
   item mItem;
   std::map<std::string, type> mTypeDict;

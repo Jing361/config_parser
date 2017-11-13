@@ -1,11 +1,11 @@
 #include<iostream>
 
-#include"xml_parse.hh"
+#include"xml_parser.hh"
 
 using namespace std;
 using namespace gsw;
 
-void xml_parse::validate_structure( const std::string& str, const item& itm ){
+void xml_parser::validate_structure( const std::string& str, const item& itm ){
   for( auto i : itm.sub_items ){
     if( mTypeDict.at( str ).count( i.first ) == 0 ){
       // differentiate between str fail and i.first fail
@@ -23,11 +23,11 @@ void xml_parse::validate_structure( const std::string& str, const item& itm ){
   }
 }
 
-void xml_parse::add_structure( const std::string& name, const std::string& sub ){
+void xml_parser::add_structure( const std::string& name, const std::string& sub ){
   mTypeDict[name].insert( sub );
 }
 
-void xml_parse::parse_xml(){
+void xml_parser::parse_xml(){
   bool isEof = false;
 
   while( !isEof ){
@@ -53,7 +53,7 @@ void xml_parse::parse_xml(){
   }
 }
 
-void xml_parse::handle_tag( item& itm ){
+void xml_parser::handle_tag( item& itm ){
   if( mCurTok->first != XML_TOKEN::OPEN_BRACKET ){
     while( mCurTok->first != XML_TOKEN::CLOSE_BRACKET ){
       itm.data += mCurTok->second + " ";
@@ -91,7 +91,7 @@ void xml_parse::handle_tag( item& itm ){
   }
 }
 
-void xml_parse::parse_attributes( item& itm ){
+void xml_parser::parse_attributes( item& itm ){
   while( mCurTok->first != XML_TOKEN::END_BRACKET &&
          mCurTok->first != XML_TOKEN::ONE_LINE_CLOSE ){
     string attr = ( mCurTok++ )->second;
