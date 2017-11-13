@@ -1,7 +1,7 @@
 #include<fstream>
 #include<regex>
 
-#include"config_parse.hh"
+#include"config_parser.hh"
 
 using namespace std;
 
@@ -13,11 +13,11 @@ const char* element_not_found::what() const noexcept{
   return mMsg.c_str();
 }
 
-void config_parse::add_element( const string& arg, const string& eleName ){
+void config_parser::add_element( const string& arg, const string& eleName ){
   mElements[arg][eleName] = string();
 }
 
-void config_parse::parse_config( const string& fileName ){
+void config_parser::parse_config( const string& fileName ){
   regex rexp1( "\\[(\\w+)\\]((?:\\s*\\w+\\s*=\\s*\\w+\\s*)+)" );
   regex rexp2( "\\s*(\\w+)\\s*=\\s*(\\w+)\\s*" );
   fstream file( fileName );
@@ -58,7 +58,7 @@ void config_parse::parse_config( const string& fileName ){
 }
 
 template<>
-bool config_parse::get_element<bool>( const std::string& tag, const std::string& name ){
+bool config_parser::get_element<bool>( const std::string& tag, const std::string& name ){
   std::string text;
 
   try{

@@ -1,5 +1,5 @@
-#ifndef __CONFIG_PARSE_HH__
-#define __CONFIG_PARSE_HH__
+#ifndef __CONFIG_PARSER_HH__
+#define __CONFIG_PARSER_HH__
 
 #include<string>
 #include<map>
@@ -34,7 +34,7 @@ public:
  *
  * The above would be described as:
  * @code{.cpp}
- * config_parse cp;
+ * config_parser cp;
  *
  * cp.add_element( "FOO", "bar" );
  * cp.add_element( "FOO", "value" );
@@ -45,7 +45,7 @@ public:
  * assert( cp.get_element<int>( "FOO", "value" ) == 42 );
  * @endcode
  */
-class config_parse{
+class config_parser{
 private:
   typedef std::map<std::string, std::string> element;
 
@@ -102,7 +102,7 @@ public:
 };
 
 template<>
-bool config_parse::get_element<bool>( const std::string& tag, const std::string& name );
+bool config_parser::get_element<bool>( const std::string& tag, const std::string& name );
 
 #endif
 

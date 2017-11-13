@@ -7,7 +7,7 @@
 #define CATCH_CONFIG_MAIN
 #include<catch.hpp>
 
-#include<config_parse.hh>
+#include<config_parser.hh>
 #include<xml_parser.hh>
 #include<xml_lexer.hh>
 #include<xml_token_type.hh>
@@ -16,7 +16,7 @@ using namespace std;
 using namespace gsw;
 
 TEST_CASE( "basics", "[config]" ){
-  config_parse cp;
+  config_parser cp;
   cp.add_element( "CPU", "ports" );
   cp.add_element( "CPU", "timers" );
   cp.add_element( "CPU", "adcs" );
