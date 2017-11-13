@@ -55,20 +55,42 @@ private:
   void validate_structure( const std::string& str, const item& itm );
 
 public:
+  /*! Read tokens pointed to between provided iterators
+   *
+   * @param first Iterator pointing to first element to add to input token stream
+   *
+   * @param last Iterator past the end of the elements to add to stream
+   */
   template<typename inputIter>
   void read( inputIter first, inputIter last ){
     mTokens.insert( mTokens.end(), first, last );
     mCurTok = mTokens.begin();
   }
 
+  /*! Add sub as a structure expected to appear under name
+   *
+   * @param name
+   *
+   * @param sub
+   */
   void add_structure( const std::string& name, const std::string& sub );
 
+  /*! Get results from parsing the data
+   */
   item get_structure(){
     return mItem;
   }
 
+  /*! Parse provided tokens
+   */
   void parse_xml();
 
+  /*! Read tokens from given iterators, then parse the data
+   *
+   * @param first
+   *
+   * @param last
+   */
   template<typename inputIter>
   void parse_xml( inputIter first, inputIter last ){
     read( first, last );

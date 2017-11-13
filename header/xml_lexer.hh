@@ -22,11 +22,22 @@ private:
   std::vector<std::pair<XML_TOKEN, std::string> > mTokens;
 
 public:
+  /*! Lex the text provided
+   */
   void lex( const std::string& text );
 
+  /*! Add final token to token stream
+   *
+   * Adds an EOF-like token to indicate the end of the token stream
+   */
   void finalize();
 
+  /*! Get iterator to first stored token
+   */
   decltype( mTokens )::iterator begin();
+
+  /*!
+   */
   decltype( mTokens )::iterator end();
 };
 

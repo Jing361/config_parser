@@ -3,3 +3,4 @@
 *.d
 depend/*
 binary/*
+export/*
